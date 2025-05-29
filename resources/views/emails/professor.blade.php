@@ -6,9 +6,9 @@
     <title>{{ $template->subject ?? 'Email' }}</title>
 </head>
 
-<body style="font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px;">
+<body>
 
-    <div style="background: #ffffff; padding: 20px; border-radius: 8px;">
+    <div style="padding:20px 0px">
         {{-- Replace placeholders dynamically --}}
         {!! str_replace(['{name}', '{sender_name}'], [$professor->name ?? 'Professor', env('APP_NAME')], $content) !!}
 
