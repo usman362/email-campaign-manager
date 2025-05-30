@@ -45,7 +45,8 @@ class EmailCampaignController extends Controller
         $sent = 0;
 
         foreach ($professors as $professor) {
-            Mail::to($professor->email)
+            $emails = array_map('trim', explode(',', $professor->email));
+            Mail::to($emails)
                 ->send(new \App\Mail\ProfessorEmail($professor, $campaign->template));
             $sent++;
         }
