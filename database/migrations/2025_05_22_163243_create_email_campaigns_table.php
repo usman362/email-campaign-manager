@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('daily_limit')->default(40);
             $table->string('sent_count')->nullable();
+            $table->string('user_id')->nullable();
             $table->timestamps();
         });
     }

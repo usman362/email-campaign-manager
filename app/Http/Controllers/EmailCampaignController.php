@@ -6,18 +6,24 @@ use App\Imports\ProfessorsImport;
 use App\Jobs\SendProfessorEmail;
 use App\Models\EmailCampaign;
 use App\Models\EmailTemplate;
+use App\Models\EmailTracking;
 use App\Models\Professor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EmailCampaignController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index(Request $request)
     {
 
-        $templates = EmailTemplate::all();
+        $templates = EmailTemplate::where('user_id', Auth::id())->get();
 
         return view('campaigns.create', compact('templates'));
     }
@@ -33,6 +39,7 @@ class EmailCampaignController extends Controller
         $campaign = new EmailCampaign();
         $campaign->template_id = $request->template_id;
         $campaign->daily_limit = 40;
+        $campaign->user_id = Auth::id();
         $campaign->status = 'running';
         $campaign->save();
 
@@ -45,9 +52,12 @@ class EmailCampaignController extends Controller
         $sent = 0;
 
         foreach ($professors as $professor) {
+            $tracking = EmailTracking::create([
+                'recipient_email' => $professor->email,
+            ]);
             $emails = array_map('trim', explode(',', $professor->email));
             Mail::to($emails)
-                ->send(new \App\Mail\ProfessorEmail($professor, $campaign->template));
+                ->send(new \App\Mail\ProfessorEmail($professor, $campaign->template,$tracking->id));
             $sent++;
         }
 

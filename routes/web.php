@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\EmailCampaignController;
 use App\Http\Controllers\EmailTrackingController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,3 +74,7 @@ Route::post('/settings', [DashboardController::class, 'updateSettings'])->name('
 Route::fallback(function () {
     return redirect()->route('dashboard');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

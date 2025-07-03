@@ -14,6 +14,8 @@
 
     </div>
 
+        <img src="{{ route('email.track', $trackingId) }}" width="1" height="1" style="display:none;" alt="">
+
 </body>
 
 </html>

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('subject');
             $table->longText('body');
+            $table->string('user_id')->nullable();
             $table->timestamps();
         });
     }

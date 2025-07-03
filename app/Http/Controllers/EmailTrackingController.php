@@ -4,28 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\EmailTracking;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class EmailTrackingController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function track($trackingId)
     {
-        $tracking = EmailTracking::findOrFail($trackingId);
+        $tracking = EmailTracking::find($trackingId);
 
-        // پہلی بار کھولنے کا وقت ریکارڈ کریں
-        if (!$tracking->opened_at) {
-            $tracking->update([
-                'opened_at' => now(),
-                'first_opened_at' => now(),
-            ]);
+        if ($tracking && !$tracking->opened_at) {
+            $tracking->opened_at = now();
+            $tracking->save();
         }
 
-        // کھولنے کی تعداد میں اضافہ کریں
-        $tracking->increment('open_count');
-        $tracking->update(['last_opened_at' => now()]);
+        // Return a transparent 1x1 GIF image
+        $gif = base64_decode(
+            'R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+        );
 
-        // ایک خالی 1x1 پکسل واپس کریں
-        return response(base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='))
-            ->header('Content-Type', 'image/png')
-            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        return Response::make($gif, 200, [
+            'Content-Type' => 'image/gif',
+            'Content-Length' => strlen($gif),
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 }

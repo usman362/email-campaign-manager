@@ -13,11 +13,13 @@ class ProfessorEmail extends Mailable
 
     public $professor;
     public $template;
+    public $trackingId;
 
-    public function __construct($professor, $template)
+    public function __construct($professor, $template, $trackingId)
     {
         $this->professor = $professor;
         $this->template = $template;
+        $this->trackingId = $trackingId;
     }
 
     public function build()
@@ -28,6 +30,7 @@ class ProfessorEmail extends Mailable
                 'professor' => $this->professor,
                 'template' => $this->template,
                 'content' => $this->template->body,
+                'trackingId' => $this->trackingId,
             ]);
     }
 }

@@ -13,12 +13,8 @@ return new class extends Migration
     {
         Schema::create('email_trackings', function (Blueprint $table) {
             $table->id();
-            $table->string('campaign_id')->nullable();
-            $table->string('professor_id')->nullable();
-            $table->string('sent_at')->nullable();
-            $table->string('opened_at')->nullable();
-            $table->string('opened_count')->nullable();
-            $table->string('last_opened_at')->nullable();
+            $table->string('recipient_email');
+            $table->timestamp('opened_at')->nullable();
             $table->timestamps();
         });
     }

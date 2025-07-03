@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class ProfessorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         $professors = Professor::orderBy('created_at', 'desc')->paginate(20);

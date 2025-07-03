@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\EmailTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmailTemplateController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         $templates = EmailTemplate::all();
@@ -33,6 +40,7 @@ class EmailTemplateController extends Controller
         $template->name = $request->name;
         $template->subject = $request->subject;
         $template->body = $request->body;
+        $template->user_id =  Auth::id();
         $template->save();
         return redirect(route('templates.index'))->with('success', 'Template Created Successfully');
     }
@@ -47,6 +55,7 @@ class EmailTemplateController extends Controller
         $template->name = $request->name;
         $template->subject = $request->subject;
         $template->body = $request->body;
+        $template->user_id = Auth::id();
         $template->save();
         return redirect(route('templates.index'))->with('success', 'Template Updated Successfully');
     }
