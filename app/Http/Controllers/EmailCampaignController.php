@@ -73,10 +73,15 @@ class EmailCampaignController extends Controller
         $campaign->status = 'completed';
         $campaign->save();
 
-        Professor::truncate();
+        $delete_professors = Professor::where('user_id', Auth::id())->get();
+        if ($delete_professors) {
+            foreach ($delete_professors as $delete) {
+                $delete->delete();
+            }
+        }
         Excel::import(new ProfessorsImport, $request->file('excel_file'));
 
-        $professors = Professor::all();
+        $professors = Professor::where('user_id', Auth::id())->get();
 
         $total = $professors->count();
         $sent = 0;
