@@ -8,6 +8,7 @@ class Professor extends Model
 {
     protected $fillable = [
         'name',
-        'email'
+        'email',
+        'user_id'
     ];
 }

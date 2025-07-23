@@ -29,16 +29,23 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ route('professors.index') }}"><i class="bi bi-people"></i>
                             Professors</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('templates.index') }}"><i
                                 class="bi bi-file-earmark-text"></i> Templates</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('campaigns.index') }}"><i class="bi bi-send"></i> Campaigns</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('settings.index') }}"><i class="bi bi-envelope"></i> Email Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="document.getElementById('logout').submit()"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                        <form action="{{route('logout')}}" id="logout" method="post">@csrf</form>
                     </li>
                 </ul>
             </div>

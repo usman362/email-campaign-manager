@@ -14,12 +14,12 @@
             <div class="form-group mb-3">
                 <label for="name">Template Name</label>
                 <input type="text" name="name" class="form-control" value="{{ $template->name }}" required
-                    placeholder="e.g. Welcome Email">
+                    placeholder="e.g. Welcome Email" autocomplete="off">
             </div>
 
             <div class="form-group mb-3">
                 <label for="subject">Email Subject</label>
-                <input type="text" name="subject" class="form-control" value="{{ $template->subject }}" required>
+                <input type="text" name="subject" class="form-control" value="{{ $template->subject }}" required autocomplete="off">
             </div>
 
             <div class="form-group mb-3">

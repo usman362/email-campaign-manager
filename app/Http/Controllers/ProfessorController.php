@@ -6,6 +6,7 @@ use App\Models\Professor;
 use App\Imports\ProfessorsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfessorController extends Controller
 {
@@ -13,10 +14,10 @@ class ProfessorController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
-        $professors = Professor::orderBy('created_at', 'desc')->paginate(20);
+        $professors = Professor::where('user_id',Auth::id())->orderBy('created_at', 'desc')->paginate(20);
         return view('professors.index', compact('professors'));
     }
 

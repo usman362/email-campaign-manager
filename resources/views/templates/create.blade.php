@@ -13,12 +13,12 @@
 
         <div class="form-group mb-3">
             <label for="name">Template Name</label>
-            <input type="text" name="name" class="form-control" required placeholder="e.g. Welcome Email">
+            <input type="text" name="name" class="form-control" autocomplete="off" required placeholder="e.g. Welcome Email">
         </div>
 
         <div class="form-group mb-3">
             <label for="subject">Email Subject</label>
-            <input type="text" name="subject" class="form-control" required>
+            <input type="text" name="subject" class="form-control" autocomplete="off" required>
         </div>
 
         <div class="form-group mb-3">

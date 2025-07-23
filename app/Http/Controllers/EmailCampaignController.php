@@ -9,6 +9,7 @@ use App\Models\EmailTemplate;
 use App\Models\EmailTracking;
 use App\Models\Professor;
 use Illuminate\Http\Request;
+use Illuminate\Mail\MailManager;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -36,11 +37,40 @@ class EmailCampaignController extends Controller
             'excel_file' => 'required|mimes:xlsx,xls,csv'
         ]);
 
+        $user = Auth::user();
+
+        if (empty($user->gmail_email) || empty($user->gmail_password)) {
+            return response()->json(['error' => 'Gmail credentials not configured'], 400);
+        }
+        $mailer = app(MailManager::class)->mailer('smtp');
+
+        // Create a custom transport on the fly:
+        $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport(
+            config('mail.mailers.smtp.host'),
+            config('mail.mailers.smtp.port'),
+            config('mail.mailers.smtp.encryption')
+        );
+
+        $transport->setUsername($user->gmail_email);
+        $transport->setPassword($user->gmail_password);
+
+        // Set it manually
+        $mailer->setSymfonyTransport($transport);
+
+        try {
+            $transport->start(); // Manually test SMTP connection
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Invalid Gmail credentials.',
+                'details' => $e->getMessage(),
+            ], 500);
+        }
+
         $campaign = new EmailCampaign();
         $campaign->template_id = $request->template_id;
-        $campaign->daily_limit = 40;
+        $campaign->name = $request->name;
         $campaign->user_id = Auth::id();
-        $campaign->status = 'running';
+        $campaign->status = 'completed';
         $campaign->save();
 
         Professor::truncate();
@@ -57,9 +87,17 @@ class EmailCampaignController extends Controller
             ]);
             $emails = array_map('trim', explode(',', $professor->email));
             Mail::to($emails)
-                ->send(new \App\Mail\ProfessorEmail($professor, $campaign->template,$tracking->id));
+                ->send(new \App\Mail\ProfessorEmail(
+                    $professor,
+                    $campaign->template,
+                    $tracking->id,
+                    $user->gmail_email,
+                    $user->gmail_username
+                ));
             $sent++;
         }
+        $campaign->sent_count = $sent;
+        $campaign->save();
 
         return response()->json([
             'message' => 'Campaign completed.',

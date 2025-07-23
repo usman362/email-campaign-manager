@@ -2,15 +2,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-3">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Total Professors</h5>
-                <p class="card-text display-6">{{ $totalProfessors }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="card text-white bg-success mb-3">
             <div class="card-body">
                 <h5 class="card-title">Total Campaigns</h5>
@@ -18,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="card text-white bg-info mb-3">
             <div class="card-body">
                 <h5 class="card-title">Total Emails Sent</h5>
@@ -26,11 +18,11 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="card text-white bg-warning mb-3">
             <div class="card-body">
-                <h5 class="card-title">Average Open Rate</h5>
-                <p class="card-text display-6">{{ $averageOpenRate }}%</p>
+                <h5 class="card-title">Total Templates</h5>
+                <p class="card-text display-6">{{ $totalTemplates }}</p>
             </div>
         </div>
     </div>
@@ -47,17 +39,15 @@
                     <th>Name</th>
                     <th>History</th>
                     <th>Total Emails</th>
-                    <th>Open Rate</th>
                     <th>Condition</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($recentCampaigns as $campaign)
                 <tr>
-                    <td><a href="{{ route('campaigns.show', $campaign->id) }}">{{ $campaign->name }}</a></td>
+                    <td>{{ $campaign->name }}</td>
                     <td>{{ $campaign->created_at->format('d/m/Y') }}</td>
                     <td>{{ $campaign->sent_count }}</td>
-                    <td>{{ $campaign->open_rate }}%</td>
                     <td>
                         @if($campaign->status == 'completed')
                             <span class="badge bg-success">Completed</span>

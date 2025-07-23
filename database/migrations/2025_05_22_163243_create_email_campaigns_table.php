@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('email_campaigns', function (Blueprint $table) {
             $table->id();
             $table->string('template_id')->nullable();
-            $table->string('excel_file_path')->nullable();
+            $table->string('name')->nullable();
             $table->string('status')->nullable();
             $table->string('daily_limit')->default(40);
             $table->string('sent_count')->nullable();

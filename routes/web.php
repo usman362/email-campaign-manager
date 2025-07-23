@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\EmailCampaignController;
 use App\Http\Controllers\EmailTrackingController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -19,20 +20,17 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Authentication Routes (if needed)
-// Auth::routes();
-
 // Dashboard Route
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 // Professors Routes
 Route::prefix('professors')->group(function () {
-    Route::get('/', [ProfessorController::class, 'index'])->name('professors.index');
-    Route::get('/create', [ProfessorController::class, 'create'])->name('professors.create');
-    Route::post('/', [ProfessorController::class, 'store'])->name('professors.store');
-    Route::get('/{professor}/edit', [ProfessorController::class, 'edit'])->name('professors.edit');
-    Route::put('/{professor}', [ProfessorController::class, 'update'])->name('professors.update');
-    Route::delete('/{professor}', [ProfessorController::class, 'destroy'])->name('professors.destroy');
+    // Route::get('/', [ProfessorController::class, 'index'])->name('professors.index');
+    // Route::get('/create', [ProfessorController::class, 'create'])->name('professors.create');
+    // Route::post('/', [ProfessorController::class, 'store'])->name('professors.store');
+    // Route::get('/{professor}/edit', [ProfessorController::class, 'edit'])->name('professors.edit');
+    // Route::put('/{professor}', [ProfessorController::class, 'update'])->name('professors.update');
+    // Route::delete('/{professor}', [ProfessorController::class, 'destroy'])->name('professors.destroy');
 
     // Excel Import
     Route::post('/import', [ProfessorController::class, 'import'])->name('professors.import');
@@ -50,6 +48,12 @@ Route::prefix('templates')->group(function () {
     Route::get('/{template}/preview', [EmailTemplateController::class, 'preview'])->name('templates.preview');
 });
 
+Route::prefix('settings')->group(function () {
+    Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
+    Route::get('/create', [SettingsController::class, 'create'])->name('settings.create');
+    Route::post('/', [SettingsController::class, 'store'])->name('settings.store');
+});
+
 // Email Campaigns Routes
 Route::prefix('campaigns')->group(function () {
     Route::get('/', [EmailCampaignController::class, 'index'])->name('campaigns.index');
@@ -65,11 +69,6 @@ Route::prefix('campaigns')->group(function () {
 Route::get('/track/{tracking_id}', [EmailTrackingController::class, 'track'])
     ->name('email.track');
 
-// Additional Routes
-Route::get('/reports', [DashboardController::class, 'reports'])->name('reports');
-Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
-Route::post('/settings', [DashboardController::class, 'updateSettings'])->name('settings.update');
-
 // Fallback Route
 Route::fallback(function () {
     return redirect()->route('dashboard');
@@ -77,4 +76,4 @@ Route::fallback(function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [DashboardController::class, 'index'])->name('home');

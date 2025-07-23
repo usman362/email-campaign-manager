@@ -6,6 +6,7 @@ use App\Models\EmailCampaign;
 use App\Models\Professor;
 use App\Models\EmailTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -16,10 +17,9 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $totalProfessors = 1;
-        $totalCampaigns = 1;
-        $totalEmailsSent = 1;
-        $averageOpenRate = 1;
+        $totalCampaigns = EmailCampaign::where('user_id',Auth::id())->count();
+        $totalEmailsSent = EmailCampaign::where('user_id',Auth::id())->sum('sent_count');
+        $totalTemplates = EmailTemplate::where('user_id',Auth::id())->count();
 
         $recentCampaigns = EmailCampaign::with('template')
             ->orderBy('created_at', 'desc')
@@ -27,10 +27,9 @@ class DashboardController extends Controller
             ->get();
 
         return view('dashboard', compact(
-            'totalProfessors',
             'totalCampaigns',
             'totalEmailsSent',
-            'averageOpenRate',
+            'totalTemplates',
             'recentCampaigns'
         ));
     }
