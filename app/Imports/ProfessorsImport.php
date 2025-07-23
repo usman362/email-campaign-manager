@@ -16,10 +16,12 @@ class ProfessorsImport implements ToModel, WithStartRow
 
     public function model(array $row)
     {
-        return new Professor([
-            'name'  => $row[0],
-            'email' => $row[1],
-            'user_id' => Auth::id()
-        ]);
+        if($row[0] !== null){
+            return new Professor([
+                'name'  => $row[0],
+                'email' => $row[1],
+                'user_id' => Auth::id()
+            ]);
+        }
     }
 }
